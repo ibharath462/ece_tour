@@ -86,9 +86,10 @@
 </body>
 <script>
 	window.sr = ScrollReveal();
-	var loaded =0;
-	var i=0;
+	var loaded =0,diff=0,tdiff=0;
+	var i=0,count=0,counter,target=0;
 	var duration=0;
+	var flag = 0;
 	var video = document.getElementById("bgvid");
 	frameTime = 1 / 2; //assume 25 fps
 	window.onload = function(){
@@ -109,16 +110,49 @@
 
 	function showCoords() {
 
-		if(event.clientX > loaded){
-			video.currentTime = (event.clientX / 1370) * video.duration;
+		diff = loaded - event.clientX;
+	    loaded = event.clientX;
+	    $("#line_on").css("width",loaded);
+	    //video.currentTime = (event.clientX / 1370) * video.duration;
+	    target = (event.clientX / 1370) * video.duration;
+	    counter=setInterval(timer, 1000);
+	    if(event.clientX > loaded){
 			right();
 		}
 		else{
-			video.currentTime = (event.clientX / 1370) * video.duration;
 			left();
 		}
-	    loaded = event.clientX;
-	    $("#line_on").css("width",loaded);
+	}
+
+	function timer()
+	{
+	  if (flag==1)
+	  {
+	  	  flag = 0;
+	      clearInterval(counter);
+	      return;
+	  }
+	  if(diff < 0){
+	  	//Forward video...
+	  	if((video.currentTime + 5) <= target){
+		  	video.currentTime += 5;
+		  	right();
+	  	}
+	  	else{
+	  		flag = 1;
+	  	}
+	  }
+	  else{
+	  	//Rewind video...
+	  	console.log(flag + "," + Math.abs(target));
+	  	if((video.currentTime - 5) >= Math.abs(target))	{
+		  	video.currentTime -= 5;
+		  	left();
+	  	}
+	  	else{
+	  		flag = 1;
+	  	}
+	  }
 	}
 
     function right(){
