@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tour</title>
+	<link rel="stylesheet" href="css/default.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/materialize.css" media="screen">
+	<script src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/materialize.min.js"></script>
+	<script src="https://unpkg.com/scrollreveal@3.3.2/dist/scrollreveal.min.js"></script>
+</head>
+<body>
+	
+	<div id="Container" style="display: block;">
+    	<video poster="images/malar.jpg" id="bgvid" playsinline autoplay muted loop>
+			<source src="Malar.mp4" type="video/mp4">
+		</video>
+		<br><br><br><br><br>
+		<div class="row">
+			<div class="col m1"></div>
+		        <div class="col s12 m3 scrollspy">
+		          <div class="card blue-grey darken-1" id="card">
+		            <div class="card-content white-text">
+		              <span class="card-title">Card Title</span>
+		              <p>I am a very simple card. I am good at containing small bits of information.
+		              I am convenient because I require little markup to use effectively.</p>
+		            </div>
+		            <div class="card-action">
+		              <a href="#">This is a link</a>
+		            </div>
+		          </div>
+		        </div>
+      	</div>
+      	<div class="row">
+			<div class="col l8"></div>
+		        <div class="col s12 m3 scrollspy">
+		          <div class="card blue-grey darken-1" id="card">
+		            <div class="card-content white-text">
+		              <span class="card-title">Card Title</span>
+		              <p>I am a very simple card. I am good at containing small bits of information.
+		              I am convenient because I require little markup to use effectively.</p>
+		            </div>
+		            <div class="card-action">
+		              <a href="#">This is a link</a>
+		            </div>
+		          </div>
+		        </div>
+      	</div>
+      	<div class="row"></div>
+      	<div class="row">
+			<div class="col m1"></div>
+		        <div class="col s12 m3 scrollspy">
+		          <div class="card blue-grey darken-1" id="card">
+		            <div class="card-content white-text">
+		              <span class="card-title">Card Title</span>
+		              <p>I am a very simple card. I am good at containing small bits of information.
+		              I am convenient because I require little markup to use effectively.</p>
+		            </div>
+		            <div class="card-action">
+		              <a href="#">This is a link</a>
+		            </div>
+		          </div>
+		        </div>
+      	</div>
+	</div>
+	<div id="timeline_wrapper" style="display: block; bottom: 0px;">
+        <div id="line">
+            <ul id="chapters">
+	            <li><a href="#" id="chapter_0" class="active current" onclick="showCoords()">Initial Days</a></li>
+	            <li><a href="#" id="chapter_1" class="" onclick="showCoords()">Facilities</a></li>
+	            <li><a href="#" id="chapter_2" class="" onclick="showCoords()">Research</a></li>
+	            <li><a href="#" id="chapter_3" class="" onclick="showCoords()">ISL</a></li>
+	            <li><a href="#" id="chapter_4" class="" onclick="showCoords()">ANUSAT</a></li>
+	            <li><a href="#" id="chapter_5" class="" onclick="showCoords()">IEEE</a></li>
+	            <li><a href="#" id="chapter_6" class="" onclick="showCoords()">Interns</a></li>
+	            <li><a href="#" id="chapter_7" class="" onclick="showCoords()">Foreign<br>Visits</a></li>
+	            <li><a href="#" id="chapter_8" class="" onclick="showCoords()">ECEA</a></li>
+	            <li><a href="#" id="chapter_9" class="" onclick="showCoords()">Sports</a></li>
+	            <li><a href="#" id="chapter_10" class="" onclick="showCoords()">Contact Us</a></li>
+            </ul>
+            <div id="line_loaded" style="width: 1397.51px;"></div>
+            <div id="line_on"></div>
+        </div>
+        <div id="shade"></div>
+    </div>
+</body>
+<script>
+	window.sr = ScrollReveal();
+	var loaded =0;
+	var i=0;
+	var duration=0;
+	var video = document.getElementById("bgvid");
+	frameTime = 1 / 2; //assume 25 fps
+	window.onload = function(){
+
+        $("#line_on").css("width",loaded);
+        video.pause();
+        window.sr = ScrollReveal();
+		sr.reveal('.row');
+		$('.scrollspy').scrollSpy();
+
+    };
+    video.addEventListener('loadeddata', function() {
+   		duration = video.duration;
+   		console.log(duration);
+	}, false);
+
+	
+
+	function showCoords() {
+
+		if(event.clientX > loaded){
+			video.currentTime = (event.clientX / 1370) * video.duration;
+			right();
+		}
+		else{
+			video.currentTime = (event.clientX / 1370) * video.duration;
+			left();
+		}
+	    loaded = event.clientX;
+	    $("#line_on").css("width",loaded);
+	}
+
+    function right(){
+		if(loaded<1370)
+        {
+            video.currentTime = Math.min(video.duration, video.currentTime + frameTime);
+            loaded = (video.currentTime / video.duration) * 1370;
+            console.log(loaded);
+            //video.currentTime = loaded % duration;
+        }
+    	$("#line_on").css("width",loaded);
+    	if(($("#chapter_"+i).position().left+60)-loaded <= 5){
+    		$("#chapter_"+i).addClass("active current");
+    		$("#chapter_"+(i-1)).removeClass("current");
+    		i++;
+    	}
+	}
+	function left(){
+		if(loaded>0){
+        video.currentTime -= frameTime;
+        //loaded-=10;
+        loaded = (video.currentTime / video.duration) * 1370;
+	}
+	$("#line_on").css("width",loaded);
+	if(loaded - ($("#chapter_"+(i-1)).position().left+60) <= 5){
+		$("#chapter_"+(i-1)).removeClass("active current");
+		i--;
+		$("#chapter_"+(i-1)).addClass("current");
+	}
+	}
+	document.onkeydown = function(e) {
+	    switch (e.keyCode) {
+	        case 38:
+	            left();
+	            break;
+	        case 40:
+	            right();
+	            break;
+	    }
+	    
+	};
+	$(function() {
+	$(window).on('wheel', function(e) {
+		var delta = e.originalEvent.deltaY;
+		if (delta > 0) right();
+		else left();
+		return true; // this line is only added so the whole page won't scroll in the demo
+	});
+	});
+
+</script>
+    
+</html>
